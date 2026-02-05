@@ -17,6 +17,7 @@ dependencies = [
     "onnxruntime",
     "onnxscript",
     "opencv-python",
+    "pre-commit",
 ]
 
 [tool.setuptools]
