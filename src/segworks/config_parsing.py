@@ -47,9 +47,17 @@ def build_training_args(cfg) -> TrainingArgs:
 def build_pipeline(config_path):
     cfg = load_config(config_path)
 
-    transforms = build_transforms(cfg["transformations"]["training"])
-    dataset = build_dataset(cfg["dataset"]["training"], transforms)
-
+    train_transforms = None
+    validation_transforms = None
+    if "transformations" in cfg:
+        if "training" in cfg["transformations"]:
+            train_transforms = build_transforms(cfg["transformations"]["training"])
+        if "validation" in cfg["transformations"]:
+           validation_transforms = build_transforms(cfg["transformations"]["validation"])
+    if "training" in cfg["dataset"]:
+        training_dataset = build_dataset(cfg["dataset"]["training"], train_transforms)
+    if "validation" in cfg["dataset"]:
+        validation_dataset = build_dataset(cfg["dataset"]["validation"], validation_transforms)
     model = build_model(cfg["model"])
 
     training_args = build_training_args(cfg["training_params"])
@@ -60,11 +68,12 @@ def build_pipeline(config_path):
 
     return {
         "model": model,
-        "dataset": dataset,
+        "training_dataset": training_dataset,
         "optimizer": optimizer,
         "scheduler": scheduler,
         "training_args": training_args,
         "output_path": output_path,
+        "validation_dataset": validation_dataset,
         "validation_fraction": cfg["training_params"].get("validation_fraction", None),
     }
 

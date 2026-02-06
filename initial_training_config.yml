@@ -8,12 +8,18 @@ model:
 # Configure the dataset (without transforms)
 dataset:
   training:
-    images_root_dir: .\\train_data
-    labels_root_dir: .\\train_data\\laneseg_label_w16
+    type: folder
+    params:
+      images_root_dir: .\\train_data
+      labels_root_dir: .\\train_data\\laneseg_label_w16
 
 # Configure transformations
 transformations:
   training:
+    - resize:
+        size: !!python/tuple [256, 256]
+
+  validation:
     - resize:
         size: !!python/tuple [256, 256]
 

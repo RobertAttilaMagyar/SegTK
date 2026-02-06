@@ -10,6 +10,8 @@ class Model(nn.Module):
     def __init__(self):
         super().__init__()
 
+        self.default_resolution = "1x3x480x480"
+
     @staticmethod
     def _validate_resolution_format(resolution: str) -> None:
         pattern = r"^\d+(x\d+)+$"
@@ -58,7 +60,7 @@ class Model(nn.Module):
         match format:
             case "onnx":
                 defaults = {
-                    "resolution": "1x3x480x480",
+                    "resolution": self.default_resolution,
                     "export_params": True,
                     "opset_version": 17,
                     "do_constant_folding": True,
